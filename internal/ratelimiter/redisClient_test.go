@@ -1,8 +1,7 @@
-package main
+package ratelimiter
 
 import (
 	"testing"
-	"time"
 )
 
 // This is a placeholder test. For real Redis integration, use a Redis test instance or a mock library.

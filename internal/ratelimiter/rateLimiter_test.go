@@ -1,4 +1,4 @@
-package main
+package ratelimiter
 
 import (
 	"testing"
@@ -7,7 +7,6 @@ import (
 
 type mockRedis struct {
 	count int
-	window time.Duration
 }
 
 func (m *mockRedis) IncrWithTTL(key string, window time.Duration) (int, time.Duration, error) {
@@ -22,6 +21,7 @@ func TestRateLimiter_Allow(t *testing.T) {
 		globalLimit:  2,
 		globalWindow: time.Second,
 	}
+
 	allowed, _ := rl.Allow("client1")
 	if !allowed {
 		t.Fatal("first request should be allowed")

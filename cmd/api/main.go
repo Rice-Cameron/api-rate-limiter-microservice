@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"os"
 	"time"
-
+	"api-rate-limiter-microservice/internal/ratelimiter"
 	"github.com/joho/godotenv"
 )
 
@@ -52,8 +52,8 @@ func loadConfig() Config {
 
 func main() {
 	config = loadConfig()
-	redisClient := NewRedisClient(config.RedisURL)
-	ratelimiter := NewRateLimiter(redisClient, config.GlobalLimit, config.GlobalWindow)
+	redisClient := ratelimiter.NewRedisClient(config.RedisURL)
+	rateLimiter := ratelimiter.NewRateLimiter(redisClient, config.GlobalLimit, config.GlobalWindow)
 
 	http.HandleFunc("/check", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
@@ -67,7 +67,7 @@ func main() {
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
-		allowed, retryAfter := ratelimiter.Allow(req.ClientID)
+		allowed, retryAfter := rateLimiter.Allow(req.ClientID)
 		resp := map[string]interface{}{"allowed": allowed}
 		if !allowed {
 			resp["retry_after"] = retryAfter.Seconds()

@@ -1,4 +1,4 @@
-package main
+package ratelimiter
 
 import (
 	"context"
@@ -6,6 +6,10 @@ import (
 
 	"github.com/go-redis/redis/v8"
 )
+
+type RedisClientInterface interface {
+	IncrWithTTL(key string, window time.Duration) (int, time.Duration, error)
+}
 
 type RedisClient struct {
 	client *redis.Client
@@ -37,4 +41,7 @@ func (r *RedisClient) IncrWithTTL(key string, window time.Duration) (int, time.D
 		return count, 0, err
 	}
 	return count, ttl, nil
-} 
+}
+
+// Ensure RedisClient implements RedisClientInterface
+var _ RedisClientInterface = (*RedisClient)(nil) 

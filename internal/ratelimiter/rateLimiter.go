@@ -1,4 +1,4 @@
-package main
+package ratelimiter
 
 import (
 	"fmt"
@@ -10,13 +10,13 @@ import (
 // Thread-safe for concurrent use
 
 type RateLimiter struct {
-	redis        *RedisClient
+	redis        RedisClientInterface
 	globalLimit  int
 	globalWindow time.Duration
 	// Optionally: per-client custom limits (map or Redis hash)
 }
 
-func NewRateLimiter(redis *RedisClient, globalLimit int, globalWindow time.Duration) *RateLimiter {
+func NewRateLimiter(redis RedisClientInterface, globalLimit int, globalWindow time.Duration) *RateLimiter {
 	return &RateLimiter{
 		redis:        redis,
 		globalLimit:  globalLimit,
