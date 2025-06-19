@@ -6,7 +6,8 @@ WORKDIR /app
 COPY . .
 RUN go mod init api-rate-limiter-microservice || true
 RUN go mod tidy
-RUN go build -o rate-limiter .
+# Build the main binary from the cmd/api directory
+RUN go build -o rate-limiter ./cmd/api
 
 # Final image
 FROM alpine:latest
