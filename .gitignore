@@ -1,0 +1,47 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Output of the go build command
+api
+
+# Build directories
+/build/
+/bin/
+
+# Vendor directory (if you use go mod vendor)
+/vendor/
+
+# Dependency directories (remove the comment below if you use these)
+# Godeps/
+
+# IDE/editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+*.sublime-workspace
+*.sublime-project
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Test binary output
+*.coverprofile
+*.test
+
+# Coverage reports
+coverage.out
+
+# Configs and secrets (uncomment if you use these)
+# .env
+# .env.* 
