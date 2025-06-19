@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+  api-rate-limiter:
+    build: .
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - RATE_LIMIT=100
+      - WINDOW_SIZE=1m
+    ports:
+      - "8080:8080"
+    depends_on:
+      - redis 
