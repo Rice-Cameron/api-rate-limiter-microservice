@@ -1,10 +1,12 @@
+// Package ratelimiter provides HTTP middleware for rate limiting.
 package ratelimiter
 
 import (
 	"net/http"
 )
 
-// RateLimitMiddleware returns a middleware that checks rate limits before passing to the next handler
+// RateLimitMiddleware returns a middleware that checks rate limits before passing to the next handler.
+// Usage: wrap your handler with this middleware, providing a function to extract the client ID from the request.
 func RateLimitMiddleware(rl *RateLimiter, extractID func(*http.Request) string) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

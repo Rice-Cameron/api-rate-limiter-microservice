@@ -1,3 +1,4 @@
+// Package main is the entrypoint for the API rate limiter microservice.
 package main
 
 import (
@@ -11,7 +12,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
-// Config holds environment-based configuration
+// Config holds environment-based configuration for the service.
 type Config struct {
 	Port         string
 	RedisURL     string
@@ -21,6 +22,7 @@ type Config struct {
 
 var config Config
 
+// loadConfig loads configuration from environment variables, with sensible defaults.
 func loadConfig() Config {
 	_ = godotenv.Load()
 	port := os.Getenv("PORT")
@@ -50,11 +52,13 @@ func loadConfig() Config {
 	}
 }
 
+// main is the entrypoint for the service. It sets up dependencies and starts the HTTP server.
 func main() {
 	config = loadConfig()
 	redisClient := ratelimiter.NewRedisClient(config.RedisURL)
 	rateLimiter := ratelimiter.NewRateLimiter(redisClient, config.GlobalLimit, config.GlobalWindow)
 
+	// /check endpoint: checks if a client is allowed to make a request.
 	http.HandleFunc("/check", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
 			w.WriteHeader(http.StatusMethodNotAllowed)
